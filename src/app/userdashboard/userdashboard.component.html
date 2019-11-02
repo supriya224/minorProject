@@ -1,0 +1,123 @@
+<div class="container-fluid">
+    <div class="row">
+            <button type="button" class="btn btn-outline-primary float-right" (click)="createIdea()">Add idea</button>
+    </div>
+      
+    <div class="row">
+        <div class="col">
+            
+  <h4 class="text-muted text-center">Treanding Ideas</h4>
+  <div class="card border-warning m-3" *ngFor="let item of yourIdeas">
+    <div class="card-header text-white bg-warning">
+        <small> {{item.title}}</small>
+        <button type="button" class="btn btn-outline-info float-right mx-2" (click)="editIdea(item)">Edit</button>
+        <button type="button" class="btn btn-outline-danger float-right" (click)="deleteIdea(item)">Delete</button>
+        <small class="float-right  mx-3" *ngIf="login.isLoggedIn()" > {{item.userId.email}}</small>
+       
+    </div>
+    <div class="card-body text-danger">
+      <h5 class="card-title">Subject:{{item.subject}}</h5>
+      <p class="card-text">{{item.description}}</p>
+
+      <a routerLink="" class="btn btn-primary float-right" *ngIf="!login.isLoggedIn()" (click)="info()">Contact hacker</a>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted ">{{item.categoryId.name}}</small>
+        <small class="text-muted text-center   mx-5 "*ngIf="login.isLoggedIn()"  >+91{{item.userId.phone}}</small>
+        
+        <small class="text-muted float-right">{{item.created|date:"medium"}}</small>
+      </div>
+  </div>
+        </div>
+         <div class="col-md-6" *ngIf="add">
+                <h4 class="text-info">Enter the detail to create an Idea</h4>
+                <form class="form-signin" #ideaFrom = "ngForm" (ngSubmit)=" saveUser(ideaFrom)">
+                        <div class="form-label-group">
+                         <input type="text"  required name="title" required [(ngModel)]="addIdea.title"  class="form-control " [class.is-invalid]="fullNameControl.invalid && fullNameControl.touched" 
+                         [class.is-valid]="fullNameControl.valid" placeholder="Enter Proper title" aria-describedby="helpId" #fullNameControl="ngModel">
+                         <span class="invalid-feedback" *ngIf="fullNameControl.invalid && fullNameControl.touched">
+                           Title is required
+                         </span>
+                        </div>
+                       <div class="form-label-group">
+                          
+                         <input type="text" id="inputEmail" required 
+                         #emailcontroler="ngModel" name="subject" id="email" [(ngModel)]="addIdea.subject" class="form-control"
+                         [class.is-invalid]="emailcontroler.invalid && emailcontroler.touched"  [class.is-valid]="emailcontroler.touched && emailcontroler.valid"
+                           placeholder="Enter Subject or theme" aria-describedby="helpId"> 
+                 
+                         <small id="helpId" class=" invalid-feedback" *ngIf="emailcontroler.errors?.required && emailcontroler.touched">Subject is required</small>
+                       
+                        </div> 
+                        <div class="form-label-group">
+                               <input type="text" placeholder="Enter Your Idea in detail" class="form-control" name="description" [(ngModel)]="addIdea.description" #phone="ngModel" [class.is-invalid]="phone.invalid && phone.touched" 
+                               [class.is-valid]="phone.touched && phone.valid" required minlength="5" />
+                                   <span class="invalid-feedback" *ngIf="phone.errors?.required">Description is required</span>
+                                   <span class="invalid-feedback" *ngIf="phone.errors && phone.errors?.minlength">description must be at least 20 characters</span>
+                              </div>
+                     
+
+                       <div class="form-group form-label-group" >
+                            <label for="dep" class="control-label" [class.text-danger]="dept.errors?.defaultvalue && dept.touched" [class.text-success]="dept.valid  && dept.touched">Category</label>
+                              <select appSelectvalidator ="-1" class="form-control" [class.is-invalid]="dept.touched && dept.invalid" [class.is-valid]="dept.valid && dept.touched"
+                               name="categoryId" id="dep" #dept="ngModel"  [(ngModel)]="addIdea.categoryId" required >
+                                
+                                <option *ngFor="let ite of categories" [value]="ite._id">{{ite.name}}</option>
+                              </select>
+                      
+                              <small class="invalid-feedback" *ngIf="dept.touched && dept.errors?.required">Category is required</small>
+                            </div>
+         
+                       <button class="btn btn-lg btn-primary btn-block text-uppercase" [disabled]="ideaFrom.invalid" type="submit">Sign up</button>
+                       <hr class="my-4">
+                     
+                     </form>
+
+        </div>
+        <div class="col-md-6" *ngIf="update">
+                <h4 class="text-info">Update Your Idea</h4>
+                <form class="form-signin" #ideaFrom = "ngForm" (ngSubmit)=" EditIdea(ideaFrom)">
+                        <div class="form-label-group">
+                         <input type="text"  required name="title" required [(ngModel)]="addIdea.title"  class="form-control " [class.is-invalid]="fullNameControl.invalid && fullNameControl.touched" 
+                         [class.is-valid]="fullNameControl.valid" placeholder="Enter Proper title" aria-describedby="helpId" #fullNameControl="ngModel">
+                         <span class="invalid-feedback" *ngIf="fullNameControl.invalid && fullNameControl.touched">
+                           Title is required
+                         </span>
+                        </div>
+                       <div class="form-label-group">
+                          
+                         <input type="text" id="inputEmail" required 
+                         #emailcontroler="ngModel" name="subject" id="email" [(ngModel)]="addIdea.subject" class="form-control"
+                         [class.is-invalid]="emailcontroler.invalid && emailcontroler.touched"  [class.is-valid]="emailcontroler.touched && emailcontroler.valid"
+                           placeholder="Enter Subject or theme" aria-describedby="helpId"> 
+                 
+                         <small id="helpId" class=" invalid-feedback" *ngIf="emailcontroler.errors?.required && emailcontroler.touched">Subject is required</small>
+                       
+                        </div> 
+                        <div class="form-label-group">
+                               <input type="text" placeholder="Enter Your Idea in detail" class="form-control" name="description" [(ngModel)]="addIdea.description" #phone="ngModel" [class.is-invalid]="phone.invalid && phone.touched" 
+                               [class.is-valid]="phone.touched && phone.valid" required minlength="5" />
+                                   <span class="invalid-feedback" *ngIf="phone.errors?.required">Description is required</span>
+                                   <span class="invalid-feedback" *ngIf="phone.errors && phone.errors?.minlength">description must be at least 20 characters</span>
+                              </div>
+                     
+
+                       <div class="form-group form-label-group" >
+                            <label for="dep" class="control-label" [class.text-danger]="dept.errors?.defaultvalue && dept.touched" [class.text-success]="dept.valid  && dept.touched">Category</label>
+                              <select appSelectvalidator ="-1" class="form-control" [class.is-invalid]="dept.touched && dept.invalid" [class.is-valid]="dept.valid && dept.touched"
+                               name="categoryId" id="dep" #dept="ngModel"  [(ngModel)]="addIdea.categoryId" required >
+                                
+                                <option *ngFor="let ite of categories" [value]="ite._id">{{ite.name}}</option>
+                              </select>
+                      
+                              <small class="invalid-feedback" *ngIf="dept.touched && dept.errors?.required">Category is required</small>
+                            </div>
+         
+                       <button class="btn btn-lg btn-primary btn-block text-uppercase" [disabled]="ideaFrom.invalid" type="submit">Update Data</button>
+                       <hr class="my-4">
+                     
+                     </form>
+
+        </div>
+    </div>  
+</div>

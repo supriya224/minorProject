@@ -1,0 +1,38 @@
+<!-- 
+  <table class="table table-hover table-striped table-dark">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Created Date</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of AllIdeas">
+        <td  class="bg-info">{{item.title}}</td>
+        <td class="bg-info">{{item.subject}}</td>
+        <td class="bg-info">{{item.created|date}}</td>
+        <td class="bg-info">{{item.description}}</td>
+      </tr>
+    </tbody>
+  </table> -->
+  <h4 class="text-muted text-center">Trending Ideas</h4>
+  <div class="card border-warning m-3" *ngFor="let item of AllIdeas">
+    <div class="card-header text-white bg-warning">
+        <small> {{item.title}}</small>
+        <small class="float-right" *ngIf="login.isLoggedIn()" > {{item.userId.email}}</small>
+    </div>
+    <div class="card-body text-danger">
+      <h5 class="card-title">Subject:{{item.subject}}</h5>
+      <p class="card-text">{{item.description}}</p>
+
+      <a routerLink="" class="btn btn-primary float-right" *ngIf="!login.isLoggedIn()" (click)="info()">Contact hacker</a>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted ">{{item.categoryId.name}}</small>
+        <small class="text-muted text-center   mx-5 "*ngIf="login.isLoggedIn()"  >+91{{item.userId.phone}}</small>
+        
+        <small class="text-muted float-right">{{item.created|date:"medium"}}</small>
+      </div>
+  </div>
